@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes import router
+from database.db import init_db
 
 app = FastAPI(title="ATM Fraud Detection API")
 
@@ -13,6 +14,11 @@ app.add_middleware(
 )
 
 app.include_router(router)
+
+@app.on_event("startup")
+def startup_event():
+    init_db()
+
 
 @app.get("/")
 def home():

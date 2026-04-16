@@ -1,7 +1,8 @@
 CREATE TABLE accounts(
-id INTEGER PRIMARY KEY AUTOINCREMENT,
-account_number INTEGER,
-status TEXT
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_number INTEGER UNIQUE,
+    status TEXT DEFAULT 'ACTIVE',
+    blocked_until TEXT
 );
 
 CREATE TABLE transactions(

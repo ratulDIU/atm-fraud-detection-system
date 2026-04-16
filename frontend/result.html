@@ -1,35 +1,415 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Fraud Result</title>
-<script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection Result - SecureATM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
+<body class="bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen">
 
-<body class="bg-gray-100">
+<!-- Header -->
+<header class="bg-white shadow-lg border-b-4 border-indigo-600">
+    <div class="container mx-auto px-4 py-5">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-xl shadow-lg">
+                    <i data-lucide="shield" class="w-7 h-7 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">SecureATM</h1>
+                    <p class="text-xs text-gray-500">Fraud Detection System</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-1 bg-gray-50 px-4 py-2 rounded-full">
+                    <i data-lucide="user" class="w-4 h-4 text-gray-600"></i>
+                    <span class="text-sm text-gray-700 font-medium"><span id="userName">User</span></span>
+                </div>
+                <button id="logoutBtn" class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition font-medium text-sm">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
 
-<div class="max-w-lg mx-auto mt-20 bg-white p-6 rounded shadow">
+<div class="container mx-auto px-4 py-10">
+    <div class="max-w-5xl mx-auto">
+        <!-- Header Section -->
+        <div class="mb-10 flex items-center justify-between">
+            <div>
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-2">Analysis Result</h2>
+                <p class="text-xl text-gray-400">Comprehensive fraud detection report</p>
+            </div>
+            <a href="index.html"
+               class="inline-flex items-center gap-2 rounded-xl border-2 border-white bg-transparent px-6 py-3 text-white font-semibold hover:bg-white hover:text-gray-900 transition">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span>New Analysis</span>
+            </a>
+        </div>
 
-<h2 class="text-xl font-bold mb-4">Fraud Result</h2>
-
-<div id="result"></div>
-
-<a href="index.html" class="text-blue-500">Back</a>
-
+        <div id="resultCard" class="space-y-6"></div>
+    </div>
 </div>
 
 <script>
+const data = JSON.parse(localStorage.getItem("fraudResult") || "null");
+const resultCard = document.getElementById("resultCard");
 
-const data = JSON.parse(localStorage.getItem("fraudResult"))
+if (!data) {
+    resultCard.innerHTML = `
+        <div class="rounded-3xl border-2 border-red-300 bg-red-50 p-10 text-center">
+            <div class="flex justify-center mb-4">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                    <i data-lucide="alert-circle" class="w-8 h-8 text-red-600"></i>
+                </div>
+            </div>
+            <h2 class="text-2xl font-bold text-red-800">No Result Found</h2>
+            <p class="mt-3 text-red-700 mb-6">Please return to the analysis page and submit your transaction data again.</p>
+            <a href="index.html" class="inline-flex items-center rounded-xl bg-red-600 px-8 py-3 text-white font-semibold hover:bg-red-700 transition gap-2">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                Back to Analyze
+            </a>
+        </div>
+    `;
+} else {
+    const riskColor = data.risk_level === "LOW" ? {
+        bg: "bg-emerald-600",
+        lightBg: "bg-emerald-50",
+        border: "border-emerald-200",
+        text: "text-emerald-700",
+        badge: "bg-emerald-100 text-emerald-700",
+        icon: "emerald"
+    } : data.risk_level === "MEDIUM" ? {
+        bg: "bg-amber-600",
+        lightBg: "bg-amber-50",
+        border: "border-amber-200",
+        text: "text-amber-700",
+        badge: "bg-amber-100 text-amber-700",
+        icon: "amber"
+    } : {
+        bg: "bg-red-600",
+        lightBg: "bg-red-50",
+        border: "border-red-200",
+        text: "text-red-700",
+        badge: "bg-red-100 text-red-700",
+        icon: "red"
+    };
 
-document.getElementById("result").innerHTML = `
-<p>Account: ${data.account}</p>
-<p>Withdraw Count: ${data.withdraw_count}</p>
-<p>Total Amount: ${data.total_amount}</p>
-<p>Risk Score: ${data.risk_score}</p>
-<p>Risk Level: ${data.risk_level}</p>
-<p>Action: ${data.action}</p>
-`
+    const statusClasses = data.status === "PERM_BLOCK" ? {
+        border: "border-red-300",
+        bg: "bg-red-50",
+        text: "text-red-700",
+        icon: "alert-triangle"
+    } : data.status === "TEMP_BLOCK" ? {
+        border: "border-amber-300",
+        bg: "bg-amber-50",
+        text: "text-amber-700",
+        icon: "clock"
+    } : {
+        border: "border-emerald-300",
+        bg: "bg-emerald-50",
+        text: "text-emerald-700",
+        icon: "check-circle"
+    };
 
+    let blockedInfo = "";
+    if (data.blocked_until) {
+        const blockDate = new Date(data.blocked_until);
+        blockedInfo = `
+            <div class="rounded-2xl border-2 border-amber-300 bg-amber-50 p-6">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="clock-alert" class="w-6 h-6 text-amber-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-amber-900 text-lg">Account Blocked</h3>
+                        <p class="text-amber-800 mt-2">This account is blocked until <strong>${blockDate.toLocaleString()}</strong></p>
+                        <p class="text-sm text-amber-700 mt-1">Block will automatically lift at the scheduled time.</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    let reasonHtml = "";
+    if (Array.isArray(data.reasons) && data.reasons.length > 0) {
+        reasonHtml = `<div class="space-y-3">${data.reasons
+            .map(reason => `
+                <div class="flex items-start gap-3">
+                    <div class="w-6 h-6 rounded-full ${riskColor.badge} flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span class="text-xs font-bold">✓</span>
+                    </div>
+                    <p class="text-gray-700">${reason}</p>
+                </div>
+            `)
+            .join("")}</div>`;
+    }
+
+    resultCard.innerHTML = `
+        <div class="rounded-3xl border-2 border-white bg-white p-8 md:p-12 shadow-2xl">
+            <!-- Main Status -->
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-10 pb-10 border-b-2 border-gray-100">
+                <div>
+                    <div class="inline-flex items-center gap-2 rounded-full ${riskColor.badge} px-4 py-2 text-sm font-bold mb-4">
+                        <i data-lucide="database" class="w-4 h-4"></i>
+                        Account #${data.account}
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mt-2">${data.risk_level} Risk</h2>
+                    <p class="text-gray-600 mt-3 text-lg">Fraud Analysis Result</p>
+                </div>
+                <div class="rounded-2xl ${statusClasses.bg} p-8 text-center">
+                    <p class="text-sm uppercase tracking-widest font-bold ${statusClasses.text} mb-2">Status</p>
+                    <p class="text-3xl font-bold ${statusClasses.text}">${data.status === 'PERM_BLOCK' ? 'BLOCKED' : data.status === 'TEMP_BLOCK' ? 'TEMP BLOCK' : 'ACTIVE'}</p>
+                </div>
+            </div>
+
+            <!-- Metrics Grid -->
+            <div class="grid md:grid-cols-4 gap-4 mb-8">
+                <div class="rounded-xl border-2 border-gray-200 bg-gray-50 p-6">
+                    <p class="text-xs uppercase tracking-wide text-gray-600 font-bold">Withdrawals</p>
+                    <p class="mt-3 text-4xl font-bold text-gray-900">${data.withdraw_count}</p>
+                </div>
+                <div class="rounded-xl border-2 border-gray-200 bg-gray-50 p-6">
+                    <p class="text-xs uppercase tracking-wide text-gray-600 font-bold">Total Amount</p>
+                    <p class="mt-3 text-3xl font-bold text-gray-900">৳${data.total_amount.toLocaleString()}</p>
+                </div>
+                <div class="rounded-xl border-2 border-gray-200 bg-gray-50 p-6">
+                    <p class="text-xs uppercase tracking-wide text-gray-600 font-bold">Risk Score</p>
+                    <p class="mt-3 text-4xl font-bold ${riskColor.text}">${data.risk_score}</p>
+                </div>
+                <div class="rounded-xl border-2 border-gray-200 bg-gray-50 p-6">
+                    <p class="text-xs uppercase tracking-wide text-gray-600 font-bold">Action</p>
+                    <p class="mt-3 text-lg font-bold text-gray-900">${data.action}</p>
+                </div>
+            </div>
+
+            <!-- Risk Analysis Reasons -->
+            <div class="rounded-2xl border-2 ${riskColor.border} ${riskColor.lightBg} p-8 mb-8">
+                <h3 class="text-xl font-bold ${riskColor.text} mb-6 flex items-center gap-3">
+                    <i data-lucide="alert-circle" class="w-6 h-6"></i>
+                    Risk Analysis Details
+                </h3>
+                ${reasonHtml}
+            </div>
+
+            ${blockedInfo}
+
+            <!-- Recommendations -->
+            <div class="rounded-2xl border-2 border-blue-200 bg-blue-50 p-8 mt-8">
+                <h3 class="text-xl font-bold text-blue-900 mb-6 flex items-center gap-3">
+                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    Bank Branch Actions
+                </h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-blue-200 flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold text-blue-700">1</span>
+                        <span class="text-blue-800">Verify account owner identity and transaction history</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-blue-200 flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold text-blue-700">2</span>
+                        <span class="text-blue-800">Confirm unusual withdrawal amounts and location changes</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-blue-200 flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold text-blue-700">3</span>
+                        <span class="text-blue-800">Follow internal fraud policy for temporary or permanent holds</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-blue-200 flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold text-blue-700">4</span>
+                        <span class="text-blue-800">Escalate to fraud control team if risk remains high</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
+// Check if user is logged in
+const user = localStorage.getItem('user');
+if (!user) {
+    window.location.href = 'login.html';
+} else {
+    document.getElementById('userName').textContent = user;
+}
+
+// Logout functionality
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('user');
+    window.location.href = 'login.html';
+});
+
+lucide.createIcons();
+</script>
+
+</body>
+</html>
+
+        <div id="resultCard" class="space-y-6"></div>
+    </div>
+</div>
+
+<script>
+const data = JSON.parse(localStorage.getItem("fraudResult") || "null");
+const resultCard = document.getElementById("resultCard");
+
+if (!data) {
+    resultCard.innerHTML = `
+        <div class="rounded-3xl border border-red-200 bg-red-50 p-8 text-center">
+            <h2 class="text-2xl font-semibold text-red-800">No result found</h2>
+            <p class="mt-3 text-slate-600">Please return to the analysis page and submit your transaction data again.</p>
+            <a href="index.html" class="mt-5 inline-flex rounded-full bg-red-600 px-6 py-3 text-white font-semibold hover:bg-red-700 transition">Back to Analyze</a>
+        </div>
+    `;
+} else {
+    const riskColor = data.risk_level === "LOW" ? {
+        bg: "bg-emerald-600",
+        text: "text-emerald-600"
+    } : data.risk_level === "MEDIUM" ? {
+        bg: "bg-amber-600",
+        text: "text-amber-600"
+    } : {
+        bg: "bg-red-600",
+        text: "text-red-600"
+    };
+
+    const statusClasses = data.status === "PERM_BLOCK" ? {
+        border: "border-red-200",
+        bg: "bg-red-50",
+        text: "text-red-700"
+    } : data.status === "TEMP_BLOCK" ? {
+        border: "border-amber-200",
+        bg: "bg-amber-50",
+        text: "text-amber-700"
+    } : {
+        border: "border-emerald-200",
+        bg: "bg-emerald-50",
+        text: "text-emerald-700"
+    };
+
+    let blockedInfo = "";
+    if (data.blocked_until) {
+        blockedInfo = `
+            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <p class="text-slate-600">This account is blocked until <strong>${new Date(data.blocked_until).toLocaleString()}</strong>.</p>
+                <p class="text-sm text-slate-500 mt-2">Please wait until the block expires before submitting another transaction.</p>
+            </div>
+        `;
+    }
+
+    let reasonHtml = "";
+    if (Array.isArray(data.reasons) && data.reasons.length > 0) {
+        reasonHtml = `<ul class="mt-4 space-y-3 text-slate-600">${data.reasons
+            .map(reason => `
+                <li class="flex items-start gap-3">
+                    <span class="mt-1 h-2.5 w-2.5 rounded-full bg-slate-900"></span>
+                    ${reason}
+                </li>
+            `)
+            .join("")}</ul>`;
+    } else if (data.status === "PERM_BLOCK") {
+        reasonHtml = `<p class="text-slate-700">This account has been permanently blocked because the transaction pattern exceeded the authorized risk threshold. The account will not be able to process any new transactions.</p>`;
+    } else if (data.status === "TEMP_BLOCK") {
+        reasonHtml = `<p class="text-slate-700">This account is temporarily blocked due to a suspicious transaction pattern. The block will automatically lift at the scheduled time.</p>`;
+    } else {
+        reasonHtml = `<p class="text-slate-700">This account is currently safe based on the entered transaction data, but continue monitoring for suspicious activity.</p>`;
+    }
+
+    resultCard.innerHTML = `
+        <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                    <div class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">
+                        <i data-lucide="database" class="w-4 h-4"></i>
+                        Account #${data.account}
+                    </div>
+                    <h2 class="mt-4 text-3xl font-bold text-slate-900">${data.risk_level} Fraud Risk Detected</h2>
+                    <p class="mt-2 text-slate-600">Detailed fraud analysis and recommended next steps for bank branch action.</p>
+                </div>
+                <div class="rounded-3xl ${statusClasses.border} ${statusClasses.bg} px-6 py-5 ${statusClasses.text}">
+                    <p class="text-sm uppercase tracking-[0.2em] font-semibold">Current Status</p>
+                    <p class="mt-3 text-2xl font-bold">${data.status || 'ACTIVE'}</p>
+                </div>
+            </div>
+
+            <div class="mt-10 grid gap-6 md:grid-cols-3">
+                <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+                    <p class="text-sm text-slate-500">Withdraw Count</p>
+                    <p class="mt-3 text-3xl font-semibold text-slate-900">${data.withdraw_count}</p>
+                </div>
+                <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+                    <p class="text-sm text-slate-500">Total Amount</p>
+                    <p class="mt-3 text-3xl font-semibold text-slate-900">৳${data.total_amount.toLocaleString()}</p>
+                </div>
+                <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+                    <p class="text-sm text-slate-500">Action</p>
+                    <p class="mt-3 text-3xl font-semibold text-slate-900">${data.action}</p>
+                </div>
+            </div>
+
+            <div class="mt-8 grid gap-6 md:grid-cols-2">
+                <div class="rounded-3xl border border-slate-200 bg-white p-6">
+                    <h3 class="text-lg font-semibold text-slate-900">Risk Score & Level</h3>
+                    <div class="mt-4 flex items-end gap-4">
+                        <div class="rounded-3xl ${riskColor.bg} px-5 py-4 text-white text-3xl font-bold">${data.risk_score}</div>
+                        <div>
+                            <p class="text-sm uppercase tracking-[0.2em] text-slate-500">Level</p>
+                            <p class="mt-2 text-2xl font-semibold text-slate-900">${data.risk_level}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="rounded-3xl border border-slate-200 bg-white p-6">
+                    <h3 class="text-lg font-semibold text-slate-900">Block Reason</h3>
+                    <div class="mt-4 text-slate-700">${reasonHtml}</div>
+                </div>
+            </div>
+
+            ${blockedInfo}
+
+            <div class="mt-8 rounded-3xl border border-slate-200 bg-slate-50 p-6">
+                <h3 class="text-lg font-semibold text-slate-900">Bank Branch Action</h3>
+                <ul class="mt-4 space-y-3 text-slate-600">
+                    <li class="flex items-start gap-3">
+                        <span class="mt-1 h-2.5 w-2.5 rounded-full bg-slate-900"></span>
+                        Verify the account owner identity and transaction history in branch.
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-1 h-2.5 w-2.5 rounded-full bg-slate-900"></span>
+                        Confirm unusual withdrawal amounts and location changes.
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-1 h-2.5 w-2.5 rounded-full bg-slate-900"></span>
+                        Follow internal fraud policy for temporary or permanent holds.
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-1 h-2.5 w-2.5 rounded-full bg-slate-900"></span>
+                        Escalate to fraud control team if risk remains high.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+</script>
+
+<script>
+    // Check if user is logged in
+    const user = localStorage.getItem('user');
+    if (!user) {
+        window.location.href = 'login.html';
+    } else {
+        document.getElementById('userName').textContent = user;
+    }
+
+    // Logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('user');
+        window.location.href = 'login.html';
+    });
+
+    lucide.createIcons();
 </script>
 
 </body>
