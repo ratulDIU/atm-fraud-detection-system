@@ -15,23 +15,24 @@
             <i data-lucide="shield" class="w-8 h-8 text-white"></i>
         </div>
         <h1 class="text-3xl font-bold text-gray-900">ATM Fraud Detection</h1>
-        <p class="text-gray-600 mt-2">Secure login to access the system</p>
+        <p class="text-gray-600 mt-2">Secure banking with fraud protection</p>
     </div>
 
+    <!-- Login Form -->
     <div id="loginForm">
         <form id="loginFormEl" class="space-y-6">
             <div>
-                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                <input type="text" id="username" name="username" required
+                <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="your.email@example.com" required
                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
             </div>
             <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input type="password" id="password" name="password" required
+                <label for="password" class="block text-sm font-medium text-gray-700">6-Digit Password</label>
+                <input type="password" id="password" name="password" maxlength="6" pattern="\d{6}" required
                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
             </div>
             <button type="submit" id="loginBtn"
-                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
                 <i data-lucide="log-in" class="w-5 h-5 mr-2"></i>
                 Sign In
             </button>
@@ -43,27 +44,28 @@
         </div>
     </div>
 
+    <!-- Registration Form -->
     <div id="registerForm" class="hidden space-y-6">
         <form id="registerFormEl" class="space-y-6">
             <div>
-                <label for="regUsername" class="block text-sm font-medium text-gray-700">Username</label>
-                <input type="text" id="regUsername" name="regUsername" required
+                <label for="accountNumber" class="block text-sm font-medium text-gray-700">Account Number</label>
+                <input type="number" id="accountNumber" name="accountNumber" placeholder="123456789" required
                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
             </div>
             <div>
-                <label for="regEmail" class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" id="regEmail" name="regEmail" required
+                <label for="cardHolderName" class="block text-sm font-medium text-gray-700">Card Holder Name</label>
+                <input type="text" id="cardHolderName" name="cardHolderName" placeholder="John Doe" required
                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
             </div>
             <div>
-                <label for="regPassword" class="block text-sm font-medium text-gray-700">Password</label>
-                <input type="password" id="regPassword" name="regPassword" required
+                <label for="regEmail" class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input type="email" id="regEmail" name="regEmail" placeholder="your.email@example.com" required
                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
             </div>
             <button type="submit" id="registerBtn"
-                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                <i data-lucide="user-plus" class="w-5 h-5 mr-2"></i>
-                Register
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50">
+                <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                Send Verification Code
             </button>
         </form>
         <div class="mt-6 text-center">
@@ -73,65 +75,393 @@
         </div>
     </div>
 
+    <!-- Email Verification Form -->
+    <div id="otpForm" class="hidden space-y-6">
+        <div class="text-center">
+            <i data-lucide="mail-check" class="w-12 h-12 text-green-600 mx-auto mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900">Verify Your Email</h3>
+            <p class="text-sm text-gray-600 mt-2">Enter the 6-digit code sent to your email</p>
+            <p id="otpTimer" class="text-sm text-red-600 font-medium mt-2"></p>
+        </div>
+        <form id="otpFormEl" class="space-y-6">
+            <div>
+                <label for="otpCode" class="block text-sm font-medium text-gray-700">Verification Code</label>
+                <input type="text" id="otpCode" name="otpCode" maxlength="6" pattern="\d{6}" required
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-center text-2xl tracking-widest">
+            </div>
+            <button type="submit" id="verifyOtpBtn"
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50">
+                <i data-lucide="check-circle" class="w-5 h-5 mr-2"></i>
+                Verify Email
+            </button>
+        </form>
+        <div class="text-center">
+            <a href="#" id="resendOtp" class="text-sm text-indigo-600 hover:text-indigo-500">Didn't receive the code? Resend</a>
+        </div>
+    </div>
+
+    <!-- Password Setup Form -->
+    <div id="passwordForm" class="hidden space-y-6">
+        <div class="text-center">
+            <i data-lucide="lock" class="w-12 h-12 text-indigo-600 mx-auto mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900">Set Your Password</h3>
+            <p class="text-sm text-gray-600 mt-2">Create a secure 6-digit password for your account.</p>
+            <p class="text-sm text-gray-600 mt-2">Avoid easy patterns like <strong>123456</strong>, repeated digits like <strong>111111</strong>, or simple sequences.</p>
+        </div>
+        <form id="passwordFormEl" class="space-y-6">
+            <div>
+                <label for="newPassword" class="block text-sm font-medium text-gray-700">6-Digit Password</label>
+                <input type="password" id="newPassword" name="newPassword" maxlength="6" pattern="\d{6}" required
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-center text-2xl tracking-widest">
+                <p id="passwordStrength" class="mt-2 text-sm"></p>
+            </div>
+            <div>
+                <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" maxlength="6" pattern="\d{6}" required
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-center text-2xl tracking-widest">
+            </div>
+            <div class="flex items-center gap-2 text-sm text-gray-600">
+                <input type="checkbox" id="togglePasswordVisibility" class="h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                <label for="togglePasswordVisibility">Show password while typing</label>
+            </div>
+            <button type="submit" id="setPasswordBtn"
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
+                <i data-lucide="save" class="w-5 h-5 mr-2"></i>
+                Set Password
+            </button>
+        </form>
+    </div>
+
     <div id="message" class="hidden mt-6 p-4 rounded-lg"></div>
 </div>
 
 <script>
+let currentUserId = null;
+let otpTimer = null;
+let timeLeft = 60;
+
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
-const showRegister = document.getElementById('showRegister');
-const showLogin = document.getElementById('showLogin');
+const otpForm = document.getElementById('otpForm');
+const passwordForm = document.getElementById('passwordForm');
 const messageDiv = document.getElementById('message');
 
+const showRegister = document.getElementById('showRegister');
+const showLogin = document.getElementById('showLogin');
+const resendOtp = document.getElementById('resendOtp');
+
+function showMessage(message, type = 'error') {
+    messageDiv.className = `mt-6 p-4 rounded-lg ${type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`;
+    messageDiv.textContent = message;
+    messageDiv.classList.remove('hidden');
+    setTimeout(() => messageDiv.classList.add('hidden'), 5000);
+}
+
+function setLoading(button, loading) {
+    button.disabled = loading;
+    button.innerHTML = loading ?
+        '<i data-lucide="loader" class="w-5 h-5 mr-2 animate-spin"></i>Loading...' :
+        button.innerHTML.replace('<i data-lucide="loader" class="w-5 h-5 mr-2 animate-spin"></i>Loading...', button.dataset.originalHtml || button.innerHTML);
+    if (!loading) button.dataset.originalHtml = button.innerHTML;
+    lucide.createIcons();
+}
+
+function startOtpTimer() {
+    timeLeft = 60;
+    const timerElement = document.getElementById('otpTimer');
+    timerElement.textContent = `Time remaining: ${timeLeft}s`;
+
+    otpTimer = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = `Time remaining: ${timeLeft}s`;
+
+        if (timeLeft <= 0) {
+            clearInterval(otpTimer);
+            timerElement.textContent = 'OTP expired. Please request a new one.';
+            document.getElementById('verifyOtpBtn').disabled = true;
+        }
+    }, 1000);
+}
+
+function stopOtpTimer() {
+    if (otpTimer) {
+        clearInterval(otpTimer);
+        otpTimer = null;
+    }
+}
+
+// Form switching
 showRegister.addEventListener('click', (e) => {
     e.preventDefault();
     loginForm.classList.add('hidden');
     registerForm.classList.remove('hidden');
+    otpForm.classList.add('hidden');
+    passwordForm.classList.add('hidden');
+    messageDiv.classList.add('hidden');
 });
 
 showLogin.addEventListener('click', (e) => {
     e.preventDefault();
     registerForm.classList.add('hidden');
     loginForm.classList.remove('hidden');
+    otpForm.classList.add('hidden');
+    passwordForm.classList.add('hidden');
+    messageDiv.classList.add('hidden');
+    stopOtpTimer();
 });
 
-document.getElementById('loginFormEl').addEventListener('submit', (e) => {
+// Registration
+document.getElementById('registerFormEl').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const button = document.getElementById('registerBtn');
+    setLoading(button, true);
 
-    // Dummy login logic
-    if (username && password) {
-        localStorage.setItem('user', username);
-        window.location.href = 'index.html';
-    } else {
-        showMessage('Please enter valid credentials', 'error');
+    const formData = new FormData(e.target);
+    const data = {
+        account_number: formData.get('accountNumber'),
+        card_holder_name: formData.get('cardHolderName'),
+        email: formData.get('regEmail')
+    };
+
+    try {
+        const response = await fetch('http://localhost:8000/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            currentUserId = result.user_id;
+            showMessage(result.message, 'success');
+            registerForm.classList.add('hidden');
+            otpForm.classList.remove('hidden');
+            startOtpTimer();
+        } else {
+            showMessage(result.message);
+        }
+    } catch (error) {
+        showMessage('Registration failed. Please try again.');
+    } finally {
+        setLoading(button, false);
     }
 });
 
-document.getElementById('registerFormEl').addEventListener('submit', (e) => {
+// OTP Verification
+document.getElementById('otpFormEl').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const username = document.getElementById('regUsername').value;
-    const email = document.getElementById('regEmail').value;
-    const password = document.getElementById('regPassword').value;
+    const button = document.getElementById('verifyOtpBtn');
+    setLoading(button, true);
 
-    // Dummy register logic
-    if (username && email && password) {
-        localStorage.setItem('user', username);
-        showMessage('Registration successful! Redirecting...', 'success');
-        setTimeout(() => window.location.href = 'index.html', 2000);
-    } else {
-        showMessage('Please fill all fields', 'error');
+    const otpCode = document.getElementById('otpCode').value;
+
+    try {
+        const response = await fetch('http://localhost:8000/verify-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: currentUserId, verification_code: otpCode })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showMessage('Email verified successfully!', 'success');
+            otpForm.classList.add('hidden');
+            passwordForm.classList.remove('hidden');
+            stopOtpTimer();
+        } else {
+            showMessage(result.message);
+        }
+    } catch (error) {
+        showMessage('OTP verification failed. Please try again.');
+    } finally {
+        setLoading(button, false);
     }
 });
 
-function showMessage(text, type) {
-    messageDiv.className = `mt-6 p-4 rounded-lg ${type === 'error' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`;
-    messageDiv.textContent = text;
-    messageDiv.classList.remove('hidden');
+// Password Setup
+document.getElementById('passwordFormEl').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const button = document.getElementById('setPasswordBtn');
+    setLoading(button, true);
+
+    const password = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (password !== confirmPassword) {
+        showMessage('Passwords do not match');
+        setLoading(button, false);
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:8000/set-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: currentUserId, password: password })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showMessage(`Registration completed! Password strength: ${result.strength}`, 'success');
+            setTimeout(() => {
+                passwordForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+            }, 2000);
+        } else {
+            showMessage(result.message);
+        }
+    } catch (error) {
+        showMessage('Password setup failed. Please try again.');
+    } finally {
+        setLoading(button, false);
+    }
+});
+
+// Login
+document.getElementById('loginFormEl').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const button = document.getElementById('loginBtn');
+    setLoading(button, true);
+
+    const formData = new FormData(e.target);
+    const data = {
+        email: formData.get('email'),
+        password: formData.get('password')
+    };
+
+    try {
+        const response = await fetch('http://localhost:8000/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Store user session
+            localStorage.setItem('user', JSON.stringify(result.user));
+            showMessage('Login successful! Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        } else {
+            showMessage(result.message);
+        }
+    } catch (error) {
+        showMessage('Login failed. Please try again.');
+    } finally {
+        setLoading(button, false);
+    }
+});
+
+// Resend verification code
+resendOtp.addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (!currentUserId) return;
+
+    const button = document.getElementById('verifyOtpBtn');
+    setLoading(button, true);
+
+    try {
+        const response = await fetch('http://localhost:8000/resend-verification', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: currentUserId })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showMessage(result.message, 'success');
+            startOtpTimer();
+            document.getElementById('verifyOtpBtn').disabled = false;
+        } else {
+            showMessage(result.message);
+        }
+    } catch (error) {
+        showMessage('Failed to resend verification code. Please try again.');
+    } finally {
+        setLoading(button, false);
+    }
+});
+
+// Password validation helpers
+const bannedPasswords = new Set([
+    '000000','111111','222222','333333','444444','555555','666666','777777','888888','999999',
+    '123456','654321','123123','112233','121212','000123','123000','123321','111222','222111'
+]);
+
+function isSequential(password) {
+    const ascending = '0123456789';
+    const descending = '9876543210';
+    return ascending.includes(password) || descending.includes(password);
 }
 
-lucide.createIcons();
+function validatePassword(password) {
+    if (password.length !== 6 || !/^\d{6}$/.test(password)) {
+        return { valid: false, message: 'Password must be exactly 6 digits.' };
+    }
+    if (bannedPasswords.has(password)) {
+        return { valid: false, message: 'This password is too easy. Choose a stronger 6-digit PIN.' };
+    }
+    if (new Set(password).size <= 2) {
+        return { valid: false, message: 'Avoid repeated digits or simple patterns like 111111 or 222222.' };
+    }
+    if (isSequential(password)) {
+        return { valid: false, message: 'Avoid sequential patterns like 123456 or 654321.' };
+    }
+    return { valid: true, message: '' };
+}
+
+function getPasswordStrength(password) {
+    const uniqueDigits = new Set(password).size;
+    if (uniqueDigits >= 5) return { text: 'Very Strong', color: 'text-green-600' };
+    if (uniqueDigits >= 4) return { text: 'Strong', color: 'text-green-600' };
+    if (uniqueDigits === 3) return { text: 'Moderate', color: 'text-yellow-600' };
+    return { text: 'Weak', color: 'text-red-600' };
+}
+
+function togglePasswordVisibility() {
+    const newPasswordField = document.getElementById('newPassword');
+    const confirmPasswordField = document.getElementById('confirmPassword');
+    const type = newPasswordField.type === 'password' ? 'text' : 'password';
+    newPasswordField.type = type;
+    confirmPasswordField.type = type;
+}
+
+document.getElementById('togglePasswordVisibility').addEventListener('change', togglePasswordVisibility);
+
+document.getElementById('newPassword').addEventListener('input', (e) => {
+    const password = e.target.value;
+    const strengthEl = document.getElementById('passwordStrength');
+    const validation = validatePassword(password);
+
+    if (password.length === 6) {
+        if (!validation.valid) {
+            strengthEl.textContent = validation.message;
+            strengthEl.className = 'mt-2 text-sm text-red-600';
+        } else {
+            const strength = getPasswordStrength(password);
+            strengthEl.textContent = `Password strength: ${strength.text}`;
+            strengthEl.className = `mt-2 text-sm ${strength.color}`;
+        }
+    } else {
+        strengthEl.textContent = '';
+    }
+});
+
+// Check if user is already logged in
+window.addEventListener('DOMContentLoaded', () => {
+    const user = localStorage.getItem('user');
+    if (user) {
+        window.location.href = 'index.html';
+    }
+    lucide.createIcons();
+});
 </script>
 
 </body>

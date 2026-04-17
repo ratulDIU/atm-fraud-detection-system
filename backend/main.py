@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 from routes import router
 from database.db import init_db
+
+load_dotenv()
 
 app = FastAPI(title="ATM Fraud Detection API")
 

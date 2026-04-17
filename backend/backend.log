@@ -1,0 +1,24 @@
+INFO:     Will watch for changes in these directories: ['/Users/mdrabbyhasan/atm-fraud-detection-system/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [44951] using StatReload
+INFO:     Started server process [44954]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:57408 - "POST /register HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57534 - "OPTIONS /register HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57534 - "POST /register HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57555 - "OPTIONS /resend-verification HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57555 - "POST /resend-verification HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57574 - "POST /resend-verification HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57577 - "OPTIONS /verify-email HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57577 - "POST /verify-email HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57580 - "OPTIONS /set-password HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57580 - "POST /set-password HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57582 - "OPTIONS /login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57582 - "POST /login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57618 - "POST /register HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57642 - "POST /verify-email HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57649 - "POST /set-password HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57655 - "POST /login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57661 - "OPTIONS /analyze HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57661 - "POST /analyze HTTP/1.1" 200 OK

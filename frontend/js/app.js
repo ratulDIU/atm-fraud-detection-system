@@ -203,8 +203,16 @@ form.addEventListener('submit', async (e) => {
     const timeIntervalValue = document.getElementById("interval").value;
     const timeInterval = timeIntervalValue ? parseInt(timeIntervalValue) : null;
 
+    // Get account number from logged-in user
+    const userData = localStorage.getItem('user');
+    if (!userData) {
+        window.location.href = 'login.html';
+        return;
+    }
+    const user = JSON.parse(userData);
+
     const data = {
-        account: document.getElementById("account").value,
+        account: user.account_number.toString(),
         transactions,
         time_interval: timeInterval
     };
